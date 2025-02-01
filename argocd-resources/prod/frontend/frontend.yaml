@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: app1-set
+  namespace: argocd
+spec:
+  generators:
+    - none: []
+  template:
+    metadata:
+      name: "app1"
+    spec:
+      project: default
+      source:
+        repoURL: "https://github.com/my-org/helm-generic-app.git"
+        targetRevision: "HEAD"
+        path: "."
+        helm:
+          valueFiles:
+            - values.yaml
+      destination:
+        server: "https://mycluster.com"
+        namespace: "prod"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true

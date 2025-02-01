@@ -1,0 +1,42 @@
+# Application values for Helm chart deployment
+
+# General application settings
+name: my-application
+namespace: dev
+replicaCount: 3
+
+# Image settings
+image:
+  repository: my-app-repository
+  tag: "v1.2.3"
+  pullPolicy: IfNotPresent
+
+# Service settings
+service:
+  name: my-application-service
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+# Ingress settings for external access
+ingress:
+  enabled: true
+  name: my-application-ingress
+  host: my-app.dev.example.com
+  path: /
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: "/"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  tls:
+    - hosts:
+        - my-app.dev.example.com
+      secretName: my-app-tls-secret
+
+# Resources (CPU and Memory requests/limits)
+resources:
+  requests:
+    memory: "128Mi"
+    cpu: "100m"
+  limits:
+    memory: "256Mi"
+    cpu: "500m"

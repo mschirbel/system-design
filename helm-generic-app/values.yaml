@@ -1,0 +1,36 @@
+# Default values for the application.
+replicaCount: 2
+
+image:
+  repository: my-app-repository
+  tag: latest
+  pullPolicy: IfNotPresent
+
+name: my-application
+namespace: default
+
+# Ingress configuration
+ingress:
+  enabled: true
+  name: my-application-ingress
+  path: /
+  host: my-app.example.com
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: "/"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+
+# Service account configuration
+serviceAccount:
+  create: true
+  name: ""
+
+# External secrets configuration
+externalSecrets:
+  enabled: true
+  secretStoreRef: "aws-secrets-manager"  # Use the correct secret store reference
+  externalSecrets:
+    - name: my-secret
+      data:
+        - secretKey: "app-secret-key"
+          targetKey: "appSecret"
+      namespace: default

@@ -1,0 +1,23 @@
+apiVersion: datadoghq.com/v1alpha1
+kind: DatadogMonitor
+metadata:
+  name: my-pod-monitor
+  namespace: default
+spec:
+  name: "Pod CrashLoopBackOff Monitor"
+  type: "metric alert"
+  query: |
+    avg(last_5m):avg:kubernetes.pod.crashloopbackoff{namespace:default} by {pod_name} > 0
+  message: |
+    @slack-monitoring-team A pod in the default namespace has entered a CrashLoopBackOff state. Please investigate immediately.
+  tags:
+    - "env:production"
+    - "team:devops"
+  priority: 2
+  options:
+    notify_no_data: false
+    no_data_timeframe: 10
+    thresholds:
+      critical: 1
+  silenced:
+    - "env:dev"

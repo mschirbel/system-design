@@ -1,0 +1,82 @@
+# Datadog Operator Helm chart configuration
+
+# Datadog API key (ensure this is securely stored, such as through a secret manager)
+datadog:
+  apiKey: "<your-datadog-api-key>"
+  appKey: "<your-datadog-app-key>"  # Optional, for additional API integration
+
+# Datadog agent settings
+agents:
+  enabled: true
+  agent:
+    # Set the Datadog agent image
+    image:
+      name: "datadog/agent:latest"
+    # Enable APM (Application Performance Monitoring)
+    apm:
+      enabled: true
+    # Enable logs collection
+    logs:
+      enabled: true
+    # Enable network monitoring
+    network:
+      enabled: true
+    # Enable process monitoring
+    process:
+      enabled: true
+
+# Datadog Operator configuration
+operator:
+  enabled: true
+  # DatadogOperator will manage your DatadogAgents
+  # Configuration for the operator
+  image:
+    name: "datadog/datadog-operator"
+    tag: "latest"
+  installCRDs: true  # Install the custom resource definitions
+  clusterAgent:
+    enabled: true
+    replicaCount: 2
+
+# Enable Datadog agent for the entire cluster (optional for multi-tenant setups)
+datadogClusterAgent:
+  enabled: true
+  replicaCount: 2
+
+# Kubernetes resources configuration for Datadog agents
+resources:
+  limits:
+    cpu: 500m
+    memory: 1Gi
+  requests:
+    cpu: 250m
+    memory: 512Mi
+
+# RBAC (Role-based Access Control) settings
+rbac:
+  create: true
+
+# Enable Datadog for Kubernetes Event collection
+kubernetesEventCollection:
+  enabled: true
+  provider: "k8s"
+
+# Datadog log collection configuration
+logCollection:
+  enabled: true
+  containerCollectAll: true
+
+# Configuring endpoints to collect metrics from different services
+dogstatsd:
+  enabled: true
+  port: 8125
+
+# Enable security agent
+securityAgent:
+  enabled: true
+
+# Configuring agent deployment settings
+agent:
+  env:
+    - name: DD_KUBERNETES_KUBELET_URL
+      value: "https://kubelet.default.svc.cluster.local:10250"

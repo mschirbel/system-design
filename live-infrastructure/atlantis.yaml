@@ -1,0 +1,36 @@
+version: 3
+projects:
+  - name: aws-infra-prod
+    dir: aws/prod
+    workspace: default
+    autoplan:
+      when_modified: ["aws/prod/*"]
+      enabled: true
+    workflow: custom-aws-workflow
+  
+  - name: aws-infra-dev
+    dir: aws/dev
+    workspace: default
+    autoplan:
+      when_modified: ["aws/dev/*"]
+      enabled: true
+    workflow: custom-aws-workflow
+
+  - name: aws-infra-data
+    dir: aws/data
+    workspace: default
+    autoplan:
+      when_modified: ["aws/data/*"]
+      enabled: true
+    workflow: custom-aws-workflow
+
+workflows:
+  custom-aws-workflow:
+    plan:
+      steps:
+        - run: terragrunt run-all init
+        - run: terragrunt run-all validate
+        - run: terragrunt run-all plan -out=tfplan
+    apply:
+      steps:
+        - run: terragrunt run-all apply tfplan
