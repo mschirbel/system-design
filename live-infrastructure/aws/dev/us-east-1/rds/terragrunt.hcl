@@ -10,7 +10,7 @@ locals {
 }
 
 terraform {
-  source = "terraform-aws-modules/rds/aws//modules/db_instance"
+  source = "terraform-aws-modules/rds/aws//modules/db_instance//v2.0"
 }
 
 inputs = {
