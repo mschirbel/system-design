@@ -49,6 +49,10 @@ inputs = {
     enable_argocd                          = true
     enable_argo_events                     = true
 
+    argo_config = {
+      gh_token = local.secrets.argo_gh_token
+    }
+
     tags = {
         Environment = "dev"
     }
